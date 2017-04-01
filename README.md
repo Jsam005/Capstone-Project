@@ -7,6 +7,10 @@
 ## Overview
 
 My web app will allow users to build their own online recipe "book". They will be able to look up specific food categories or recipes and all recipe books are public so everyone will have access to any recipes posted online. The purpose of this application is to allow users to interact with one another by sharing their recipes. Eventually users will be able to leave comments and create a list of their favorites as well as uploading photos.
+
+
+## Functionality
+
 * Users will need to create an account in order to begin using the application
 * In order to create an account the minimum requirements are:
     * Username
@@ -16,8 +20,6 @@ My web app will allow users to build their own online recipe "book". They will b
         * Profile picture (if one isn't added a default picture will be automatically added)
         * Personal information (DOB, City/State, Biography)
 
-
-## Functionality
 
 At a minimum the application should be able to:
 * Validate the username to make sure it isn't already taken
