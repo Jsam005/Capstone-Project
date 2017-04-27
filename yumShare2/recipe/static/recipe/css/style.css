@@ -1,0 +1,11 @@
+body{
+    background: url("images/food background.jpeg");
+}
+
+.navbar{
+    border-radius: 0;
+}
+
+.navbar-brand{
+    font-family: 'Satisfy', cursive;
+}

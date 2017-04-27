@@ -1,61 +1,75 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth import authenticate, login
+from django.views.generic import View
 from .models import RecipeInfo, Ingredient, Direction, Comment
-from .forms import RecipeTitleForm, IngredientForm, DirectionForm, CommentForm
+from .forms import UserForm
 
 # Create your views here.
 
-def detailed_view(request, title=None):
-    recipe = get_object_or_404(RecipeInfo, title=title)
-    ingredient = Ingredient.objects.get(recipe=recipe)
-    direction = Direction.objects.get(recipe=recipe)
-    comment = recipe.comment_set.all()
-    template = "recipes.html"
-    context = {
-        'recipe': recipe,
-        'comment': comment,
-        'ingredient': ingredient,
-        'direction': direction,
-    }
-    return render(request, template, context)
+class ListView(generic.ListView):
+    template_name = 'recipe/home.html'
 
-def create_recipe(request):
+    def get_queryset(self):
+        return RecipeInfo.objects.all()
+
+class DetailView(generic.DetailView):
+    model = RecipeInfo, Comment
+    template_name = 'recipe/detail.html'
+
+class CreateRecipe(CreateView):
+
+
+#def create_recipe(request):
     # Lets the users create recipes, checks that the form is valid and saves the recipe
 
-    if request.method == 'GET':
-        form = RecipeTitleForm(data=request.POST)
+    #form = AddRecipeForm(request.POST or None)
+
+    #context = {'form': form}
+    #return render(request, 'recipe/create.html', context)
+
+class RecipeUpdate(UpdateView):
+    model = RecipeInfo
+    fields = ['title', 'category']
+
+class RecipeDelete(DeleteView):
+    model = RecipeInfo
+    success_url = reverse_lazy('recipe:home')
+
+class UserFormView(View):
+    form_class = UserForm
+    template_name = 'recipe/registration_form.html'
+
+    # display a new blank form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    # process the form data and validate it
+    def post(self, request):
+        form = self.form_class(request.POST)
+
         if form.is_valid():
-            return redirect('/recipes/')
+            # storing the data locally but not actually saving it yet
+            user = form.save(commit=False)
 
-    context = {'form': form}
-    return render(request, 'create_recipe.html', context)
+            # cleaned data - data that is formatted properly
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            # saves the user to the database
+            user.save()
 
-def update_recipe(request):
+            # return User objects if credentials are correct
+            user = authenticate(username=username, password=password)
 
-    recipe = RecipeInfo.objects.get()
+            if user is not None:
 
-    if request.method == 'GET':
-        form = RecipeTitleForm(instance=recipe)
+                if user.is_active:
+                    login(request, user)
+                    return redirect('recipe:home')
 
-    elif request.method == 'POST':
-        form = RecipeTitleForm(instance=recipe, data=request.POST)
-
-        if form.is_valid():
-            recipe = form.save(commit=False)
-            recipe.save()
-            return redirect('/recipes/')
-
-    context = {'form': form}
-    return render(request, 'create_recipe.html', context)
-
-def delete_recipe(request):
-
-    recipe = RecipeInfo.objects.get()
-    recipe.delete()                     # Delete step
-    return redirect('/recipes')         # Success!
-
-def recipe_list(request):
-    # Generates a list of all recipes
-    recipes = RecipeInfo.objects.all()
-    context = {'recipes': recipes}
-    return render(request, 'recipes.html', context)
+        return render(request, self.template_name, {'form': form})
 
