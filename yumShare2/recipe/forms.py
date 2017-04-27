@@ -9,3 +9,8 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password']
+
+class AddRecipeForm(forms.ModelForm):
+    class Meta:
+        model = RecipeInfo
+        fields = ['title', 'category']

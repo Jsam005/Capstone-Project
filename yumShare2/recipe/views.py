@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
 from .models import RecipeInfo, Ingredient, Direction, Comment
-from .forms import UserForm
+from .forms import UserForm, AddRecipeForm
 
 # Create your views here.
 
@@ -19,16 +19,13 @@ class DetailView(generic.DetailView):
     model = RecipeInfo, Comment
     template_name = 'recipe/detail.html'
 
-class CreateRecipe(CreateView):
+def create_recipe(request):
+    """Lets the users create recipes, checks that the form is valid and saves the recipe"""
 
+    form = AddRecipeForm(request.POST or None)
 
-#def create_recipe(request):
-    # Lets the users create recipes, checks that the form is valid and saves the recipe
-
-    #form = AddRecipeForm(request.POST or None)
-
-    #context = {'form': form}
-    #return render(request, 'recipe/create.html', context)
+    context = {'form': form}
+    return render(request, 'recipe/create.html', context)
 
 class RecipeUpdate(UpdateView):
     model = RecipeInfo
