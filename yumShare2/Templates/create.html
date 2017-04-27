@@ -1,0 +1,21 @@
+{% extends 'recipe/base.html' %}
+{% block title %}Create a Recipe{% endblock %}
+
+{% block content %}
+
+    <div style = 'background-color: aqua; height: 500px; width: 50vw;'>
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+    </div>
+
+{% endblock  %}
+
+{% block script %}
+
+    if(jQuery){
+    console.log("hello jquery");
+    }
+
+{% endblock %}
