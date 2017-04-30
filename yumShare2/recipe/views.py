@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -5,12 +6,20 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
 from .models import RecipeInfo, Ingredient, Direction, Comment
-from .forms import UserForm, AddRecipeForm
+from .forms import UserForm, IngredientFormSet, DirectionFormSet
 
 # Create your views here.
 
+def home(request):
+    context = {}
+    return render(request, 'recipe/home.html', context)
+
+def profile(request):
+    context = {}
+    return render(request, 'recipe/profile.html', context)
+
 class ListView(generic.ListView):
-    template_name = 'recipe/home.html'
+    template_name = 'recipe/recipeinfo_list.html'
 
     def get_queryset(self):
         return RecipeInfo.objects.all()
@@ -19,13 +28,43 @@ class DetailView(generic.DetailView):
     model = RecipeInfo, Comment
     template_name = 'recipe/detail.html'
 
-def create_recipe(request):
-    """Lets the users create recipes, checks that the form is valid and saves the recipe"""
+class RecipeCreateView(CreateView):
+    model = RecipeInfo
+    fields = ['title', 'category']
+    success_url = reverse_lazy('recipe:list-recipe')
 
-    form = AddRecipeForm(request.POST or None)
+    def get_context_data(self, **kwargs):
+        data = super(RecipeCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['ingredients'] = IngredientFormSet(self.request.POST)
+            data['directions'] = DirectionFormSet(self.request.POST)
+        else:
+            data['ingredients'] = IngredientFormSet()
+            data['directions'] = DirectionFormSet()
+        return data
 
-    context = {'form': form}
-    return render(request, 'recipe/create.html', context)
+    def form_valid(self, form):
+        context = self.get_context_data()
+        ingredients = context['ingredients']
+        directions = context['directions']
+        with transaction.atomic():
+            self.object = form.save()
+
+            if ingredients.is_valid():
+                ingredients.instance = self.object
+                ingredients.save()
+                directions.instance = self.object
+                directions.save()
+        return super(RecipeCreateView, self).form_valid(form)
+
+
+#def create_recipe(request):
+    # Lets the users create recipes, checks that the form is valid and saves the recipe
+
+    #form = AddRecipeForm(request.POST or None)
+
+    #context = {'form': form}
+    #return render(request, 'recipe/create.html', context)
 
 class RecipeUpdate(UpdateView):
     model = RecipeInfo
@@ -33,8 +72,11 @@ class RecipeUpdate(UpdateView):
 
 class RecipeDelete(DeleteView):
     model = RecipeInfo
-    success_url = reverse_lazy('recipe:home')
+    success_url = reverse_lazy('recipe:list-recipe')
 
+""" 
+User registration form
+"""
 class UserFormView(View):
     form_class = UserForm
     template_name = 'recipe/registration_form.html'
@@ -49,7 +91,7 @@ class UserFormView(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            # storing the data locally but not actually saving it yet
+        # storing the data locally but not actually saving it yet
             user = form.save(commit=False)
 
             # cleaned data - data that is formatted properly
@@ -67,6 +109,4 @@ class UserFormView(View):
                 if user.is_active:
                     login(request, user)
                     return redirect('recipe:home')
-
         return render(request, self.template_name, {'form': form})
-
