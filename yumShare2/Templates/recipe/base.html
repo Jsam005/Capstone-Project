@@ -10,7 +10,7 @@
 <!-- Google fonts link -->
 <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" type="text/css">
 <!-- Link to the apps css static file -->
-<link rel="stylesheet" type="text/css" href="{% static 'recipe/style.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'recipe/css/style.css' %}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -34,13 +34,13 @@
         <!-- Items -->
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
-                <li class="">
-                    <a href="{% url 'recipe:home' %}">
+                <li class="breadcrumbs">
+                    <a href="{% url 'recipe:profile' %}">
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Profile
                     </a>
                 </li>
-                <li class="active">
-                    <a href="#">
+                <li class="breadcrumbs">
+                    <a href="{% url 'recipe:list-recipe' %}">
                         <span class="glyphicon glyphicon-grain" aria-hidden="true"></span>&nbsp;Recipes
                     </a>
                 </li>
@@ -55,7 +55,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
-                    <a href="{% url 'recipe:add-recipe' %}">
+                    <a href="{% url 'recipe:create-recipe' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Recipe
                     </a>
                 </li>
