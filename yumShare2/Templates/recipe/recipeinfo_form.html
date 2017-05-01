@@ -1,6 +1,6 @@
 {% extends "recipe/base.html" %}
 {% load static %}
-{% block title %}Create a Recipe{% endblock %}
+{% block title %}Add a Recipe{% endblock %}
 {% block active_recipes %}active{% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
         <div class="col-sm-12 col-md-8">
             <div class="panel panel-default">
                 <div class="panel-body">
-    <h2>Recipe</h2>
+    <h1 style="font-family: Candara">Add a Recipe</h1>
     <hr>
     <div class="col-md-4">
         <form action="" method="post">{% csrf_token %}
@@ -28,7 +28,7 @@
                         </tr>
                         </thead>
                     {% endif %}
-                    <tr class="{% cycle row1 row2 %} formset_row">
+                    <tr class="formset-row{% cycle row1 row2 %}">
                         {% for field in form.visible_fields %}
                             <td>
                                 {# Include the hidden fields in the form #}
@@ -44,7 +44,7 @@
                     </tr>
                 {% endfor %}
             </table>
-        <input type="submit" value="Save"/> <a href="{% url 'recipe:list-recipe' %}"></a>
+        <input type="submit" value="Add"/>
 
             <table class="table">
                 {{ directions.management_form }}
@@ -59,7 +59,7 @@
                         </tr>
                         </thead>
                     {% endif %}
-                    <tr class="{% cycle row1 row2 %} formset_row">
+                    <tr class="formset-row{% cycle row1 row2 %}">
                         {% for field in form.visible_fields %}
                             <td>
                                 {# Include the hidden fields in the form #}
@@ -75,7 +75,7 @@
                     </tr>
                 {% endfor %}
             </table>
-        <input type="submit" value="Save"/> <a href="{% url 'recipe:list-recipe' %}"></a>
+        <input type="submit" value="Add"/>
 
             <div class="inline-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -97,7 +97,7 @@
         $('.formset_row').formset({
             addText: 'Add',
             deleteText: 'Remove',
-            prefix: 'ingredients_set', 'directions_set'
+            prefix: 'ingredients_set'
 
         });
     </script>

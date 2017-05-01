@@ -1,0 +1,33 @@
+{% extends 'recipe/base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h1 style="color: azure; font-family: Candara">Welcome</h1>
+    <hr>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2>Login</h2>
+                    <br>
+                    <h4>Create a New Account Below</h4>
+                    <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <div class="form-group">
+                            <div class="col-sm-2 col-sm-10">
+                                <button type="submit" class="btn btn-success" value="Login">Login</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
