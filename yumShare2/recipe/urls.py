@@ -6,10 +6,6 @@ app_name = 'recipe'
 urlpatterns = [
     # /recipe/
     url(r'^$', v.home, name='home'),
-    # /recipe/profile/
-    url(r'^profile/$', v.profile, name='profile'),
-    # /recipe/register/
-    url(r'^register/$', views.UserFormView.as_view(), name='register'),
     # /recipe/detail/
     url(r'^(?P<title>[\w.@+-]+)/$', views.DetailView.as_view(), name='detail'),
     # /recipe/recipes/list/
