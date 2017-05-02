@@ -6,7 +6,7 @@
     <h1>Recipe Details</h1>
 
     <!-- Picture -->
-    <a href="{% url 'recipe:detail' recipe.id %}">
+    <a href="{% url 'recipe:detail' title %}">
         <img src="{{ recipe.picture.url }}" class="img-responsive">
     </a>
 
@@ -16,7 +16,7 @@
     </div>
 
     <!-- Details -->
-    <a href="{% url 'recipe:detail' recipe.id %}" class="btn btn-primary btn sm">{{ info.title }}</a>
+    <a href="{% url 'recipe:detail' title %}" class="btn btn-primary btn sm">{{ info.title }}</a>
 
     <!-- Delete -->
     <form action="{% url 'recipe:delete-recipe' recipe.id %}" method="POST" style="display: inline;">

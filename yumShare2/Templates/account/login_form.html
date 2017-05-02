@@ -12,16 +12,33 @@
                 <div class="panel-body">
                     <h2>Login</h2>
                     <br>
-                    <h4>Create a New Account Below</h4>
-                    <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+                    <h4>Please login below</h4>
+                    <form class="form-horizontal" action="{% url 'account:login'%}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form.as_p }}
 
+                        {% if form.errors %}
+                            <p class="label label-danger">
+                                Your username and password didn't match.
+                                Please try again.
+                            </p>
+                        {% endif %}
+                        <table>
+                            <tr>
+                                <td>{{ form.username.label_tag }}</td>
+                                <td>{{ form.username }}</td>
+                                <br>
+                            </tr>
+                            <tr>
+                                <td>{{ form.password.label_tag }}</td>
+                                <td>{{ form.password }}</td>
+                            </tr>
+                        </table>
                         <div class="form-group">
                             <div class="col-sm-2 col-sm-10">
                                 <button type="submit" class="btn btn-success" value="Login">Login</button>
                             </div>
                         </div>
+                        <input type="hidden" name="next" value="{{ next }}" />
                     </form>
 
                 </div>
@@ -29,5 +46,6 @@
         </div>
     </div>
 </div>
+
 
 {% endblock %}
