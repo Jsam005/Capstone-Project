@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserLoginForm
@@ -12,15 +13,14 @@ def profile(request):
 
 def login_view(request):
     form = UserLoginForm(request.POST or None)
-    next = request.GET.get('next')
+
     if form.is_valid():
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
         user = authenticate(username=username, password=password)
-        login(request, user)
-        if next:
-            return redirect(next)
-        return redirect('account:profile')
+        if user is not None:
+            login(request, user)
+            return redirect('account:profile')
     return render(request, 'account/login_form.html', {"form": form})
 
 def register_view(request):
@@ -37,4 +37,4 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('account:logout')
+    return HttpResponseRedirect()
