@@ -5,14 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}yumShare{% endblock %}</title>
-    <!-- Bootstrap link -->
+<!-- Bootstrap link -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!-- Google fonts link -->
 <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" type="text/css">
 <!-- Link to the apps css static file -->
 <link rel="stylesheet" type="text/css" href="{% static 'recipe/css/style.css' %}"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -33,6 +32,7 @@
 
         <!-- Items -->
         <div class="collapse navbar-collapse" id="topNavBar">
+            {% if user.is_authenticated %}
             <ul class="nav navbar-nav">
                 <li class="breadcrumbs">
                     <a href="{% url 'account:profile' %}">
@@ -41,35 +41,33 @@
                 </li>
                 <li class="breadcrumbs">
                     <a href="{% url 'recipe:list-recipe' %}">
-                        <span class="glyphicon glyphicon-grain" aria-hidden="true"></span>&nbsp;Recipes
+                        <span class="glyphicon glyphicon-grain" aria-hidden="true"></span>&nbsp;My Recipes
                     </a>
                 </li>
-            </ul>
-
-            <form class="navbar-form navbar-left" role="search" method="get" action="#">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="query" value=""/>
-                </div>
-                <button type="submit" class="btn btn-default">Search</button>
-            </form>
-
-            <ul class="nav navbar-nav navbar-right">
                 <li class="">
                     <a href="{% url 'recipe:create-recipe' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Recipe
                     </a>
                 </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <form class="navbar-form navbar-left" role="search" method="get" action="#">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="query" value=""/>
+                    </div>
+                <button type="submit" class="btn btn-default">Search</button>
+                </form>
                 <li class="">
-                    {% if user.is_authenticated %}
                     User: {{ user.get_username }}
                     <a href="{% url 'account:logout'%}?next={{request.path}}">
                         <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout</a>
                     {% else %}
-                        <a href="{% url 'account:login'%}?next={{request.path}}">&nbsp;Login/Register</a>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'account:login'%}?next={{request.path}}">Login</a></li>
+                    <li><a href="{% url 'account:register'%}?next={{request.path}}">Register</a></li>
+                </ul>
                     {% endif %}
-{#                    <a href="{% url 'account:logout' %}">#}
-{#                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout#}
-{#                    </a>#}
                 </li>
             </ul>
 
@@ -84,6 +82,10 @@
 {% block script %}
 
 {% endblock %}
+
+<!-- Script Tags -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
 </html>

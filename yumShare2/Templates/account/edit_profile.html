@@ -1,0 +1,15 @@
+{% extends 'recipe/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <h1 style="color: azure; font-family: Candara">Edit Profile</h1>
+    <hr>
+    <div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    </div>
+
+{% endblock %}

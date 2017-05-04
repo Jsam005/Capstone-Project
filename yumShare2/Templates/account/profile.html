@@ -1,10 +1,18 @@
 {% extends 'recipe/base.html' %}
+{% load staticfiles %}
 
 {% block content %}
     <h1 style="color: azure; font-family: Candara">Profile</h1>
     <hr>
 
+    <h2>Hello {{ user }}</h2>
     <div class="container">
-
+    <img src="{{ user.userprofile.profile_image.url }}">
+    <p>First name: {{ user.first_name }}</p>
+    <p>Last name: {{ user.last_name }}</p>
+    <p>Email: {{ user.email }}</p>
     </div>
+
+    <a href="{% url 'account:edit-profile' %}">Click here to edit profile</a>
+
 {% endblock %}
