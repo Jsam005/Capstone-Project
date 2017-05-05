@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=50, blank=True)
     birthdate = models.DateField(blank=True)
     biography = models.TextField(blank=True, help_text='Tell us about yourself')
-    profile_image = models.ImageField(upload_to='profile_images', blank=True, default='default-profile.png')
+    profile_image = models.ImageField(upload_to='profile_images', blank=True, default='/static/images/default-profile.png')
 
     def __str__(self):
         return self.user.username

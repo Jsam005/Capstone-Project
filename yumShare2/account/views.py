@@ -21,11 +21,7 @@ def create_profile(request):
             form = CreateProfileForm()
             return render(request, 'account/edit_profile.html', {'form': form})
 
-
-def update_user():
-    pass
-
-def delete_user():
+def delete():
     pass
 
 def login_view(request):
@@ -73,7 +69,10 @@ def register_view(request):
     return render(request, 'account/registration_form.html', {"form": form})
 
 def profile_view(request):
-    context = {'user': request.user}
+    profile = get_object_or_404(UserProfile, user=request.user)
+    context = {
+        'profile': profile
+    }
     return render(request, 'account/profile.html', context)
 
 def edit_profile_view(request):
