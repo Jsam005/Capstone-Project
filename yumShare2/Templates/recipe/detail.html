@@ -4,22 +4,25 @@
 {% block content %}
 
     <h1>Recipe Details</h1>
-
-    <!-- Picture -->
-    <a href="{% url 'recipe:detail' title %}">
-        <img src="{{ recipe.picture.url }}" class="img-responsive">
-    </a>
+    <hr>
 
     <div class="caption">
-    <h2>{{ recipe.title }}</h2>
-
+    <h2 class="title">{{ recipe.title }} - {{ recipe.category }}</h2>
     </div>
 
+    <h3>Ingredients</h3>
+    {{ recipe.ingredient|linebreaks }}
+    <h3>Directions</h3>
+    {{ recipe.direction|linebreaks }}
+    <p>Preparation time: {{ recipe.prep_time_in_minutes }} minutes</p>
+    <p>Cook time: {{ recipe.cook_time_in_minutes }} minutes</p>
+
+
     <!-- Details -->
-    <a href="{% url 'recipe:detail' title %}" class="btn btn-primary btn sm">{{ info.title }}</a>
+    <a href="{% url 'recipe:detail' title %}" class="btn btn-primary btn sm">View Details</a>
 
     <!-- Delete -->
-    <form action="{% url 'recipe:delete-recipe' recipe.id %}" method="POST" style="display: inline;">
+    <form action="{% url 'recipe:delete-recipe' title %}" method="POST" style="display: inline;">
         {% csrf_token %}
         <input type="hidden" name="recipe_id" value="{{ recipe_id }}"/>
         <button type="submit" class="btn btn-default btn-sm">
