@@ -1,18 +1,32 @@
 {% extends 'recipe/base.html' %}
+{% block title %}My Profile{% endblock %}
 {% load staticfiles %}
 
 {% block content %}
     <h1 style="color: azure; font-family: Candara">Profile</h1>
     <hr>
-
-    <h2>Hello {{ user }}</h2>
-    <div class="container">
-    <img src="{{ user.userprofile.profile_image.url }}">
-    <p>First name: {{ user.first_name }}</p>
-    <p>Last name: {{ user.last_name }}</p>
-    <p>Email: {{ user.email }}</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                <h2>Welcome: {{ user }}</h2>
+                    <hr>
+                    <img src="{{ user.userprofile.profile_image }}" alt=""/>
+                    <p><strong>First name: </strong>{{ user.first_name }}</p>
+                    <p><strong>Last name: </strong>{{ user.last_name }}</p>
+                    <p><strong>Email: </strong>{{ user.email }}</p>
+                    <p><strong>City/State: </strong>{{ user_profile.location }}</p>
+                    <p><strong>Birth date: </strong>{{ user_profile.birthdate }}</p>
+                    <p><strong>About Me: </strong>{{ user_profile.biography }}</p>
+                    <div class="btn-group btn-group-default" style="border: solid;">
+                        <button type="submit" class="btn btn-success"><a href="{% url 'account:update-profile' %}">Edit profile</a></button>
+                        <button type="submit" class="btn btn-success"><a href="{% url 'account:change-password' %}">Change Password</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <a href="{% url 'account:edit-profile' %}">Click here to edit profile</a>
+</div>
 
 {% endblock %}
