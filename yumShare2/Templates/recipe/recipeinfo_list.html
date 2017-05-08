@@ -3,12 +3,13 @@
 
 {% block content %}
 
-    <h2 style="color: azure; font-family: Candara">All of your Recipes: </h2>
+    <h1 style="color: azure; font-family: Candara">All of your Recipes: </h1>
+    <hr>
     <div class="container-fluid" style="color: azure; font-family: Candara">
         <ul>
             {% for recipe in object_list %}
                 <li>
-                    Title: {{ recipe.title }}<br>
+                    Title: <a href=""> {{ recipe.title }}</a><br>
                     Category: {{ recipe.category}}
                 </li>
             {% empty %}
