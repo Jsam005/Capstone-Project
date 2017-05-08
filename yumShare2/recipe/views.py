@@ -1,12 +1,12 @@
 from django.db import transaction
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import View
 from .models import RecipeInfo, Ingredient, Direction, Comment
 from .forms import IngredientFormSet, DirectionFormSet
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -14,14 +14,22 @@ def home(request):
     context = {}
     return render(request, 'recipe/home.html', context)
 
-class ListView(generic.ListView):
+# class ListView(generic.ListView):
+#     template_name = 'recipe/recipeinfo_list.html'
+#
+#     def get_queryset(self):
+#         return RecipeInfo.objects.all()
+
+class RecipeListView(ListView):
+    model = RecipeInfo
     template_name = 'recipe/recipeinfo_list.html'
 
-    def get_queryset(self):
-        return RecipeInfo.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super(RecipeListView, self).get_context_data(**kwargs)
+        return context
 
-class DetailView(generic.DetailView):
-    model = RecipeInfo, Comment
+class RecipeDetailView(generic.DetailView):
+    model = RecipeInfo
     template_name = 'recipe/detail.html'
 
 class RecipeCreateView(CreateView):
@@ -55,25 +63,18 @@ class RecipeCreateView(CreateView):
         return super(RecipeCreateView, self).form_valid(form)
 
 
-#def create_recipe(request):
-    # Lets the users create recipes, checks that the form is valid and saves the recipe
-
-    #form = AddRecipeForm(request.POST or None)
-
-    #context = {'form': form}
-    #return render(request, 'recipe/create.html', context)
-
 class RecipeUpdateView(UpdateView):
     model = RecipeInfo
     form_class = IngredientFormSet, DirectionFormSet
+    template_name = 'recipe/update.html'
     success_url = reverse_lazy('recipe:update-recipe')
 
     def get_object(self):
         pass
 
 
-    def get_context_data(self, **kwargs):
-        context = super(RecipeUpdateView, self).get_context_data(**kwargs)
+    def get_context_data(self):
+        context = super(RecipeUpdateView, self).get_context_data()
         if self.request.POST:
             context['ingredients'] = IngredientFormSet(self.request.POST, instance=self.object)
             context['directions'] = DirectionFormSet(self.request.POST, instance=self.object)
@@ -86,15 +87,21 @@ class RecipeUpdateView(UpdateView):
         context = self.get_context_data()
         ingredients = context['ingredients']
         directions = context['directions']
-        if ingredients.is_valid() and directions.is_valid():
+        if ingredients.is_valid():
             self.object = form.save()
             ingredients.instance = self.object
             ingredients.save()
+        if directions.is_valid():
             directions.instance = self.object
             directions.save()
-        return render(self.get_context_data(form=form))
+        return render(self.get_context_data())
 
 
 class RecipeDelete(DeleteView):
     model = RecipeInfo
     success_url = reverse_lazy('recipe:list-recipe')
+
+def search_bar_view(request, word):
+    queryset = RecipeInfo.objects.filter(title__contains=word).values()
+
+    return JsonResponse({'results': list(queryset)})
