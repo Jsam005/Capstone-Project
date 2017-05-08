@@ -6,15 +6,16 @@ app_name = 'recipe'
 urlpatterns = [
     # /recipe/
     url(r'^$', v.home, name='home'),
-    # /recipe/detail/
-    url(r'recipe/^(?P<title>[\w.@+-]+)/$', views.DetailView.as_view(), name='detail'),
-    # /recipe/recipes/list/
-    url(r'^recipe/list/$', views.ListView.as_view(), name='list-recipe'),
-    # /recipe/recipes/create/
-    # url(r'^recipes/create/$', v.create_recipe, name='create-recipe'),
+    # /recipe/title/
+    #url(r'^recipe/(?P<slug>[-\W]+)/$', views.RecipeDetailView.as_view(), name='detail'),
+    url(r'^recipe/(?P<title>[-\w]+)/$', views.RecipeDetailView, name='detail'),
+    # /recipe/list/
+    url(r'^recipe/list/$', views.RecipeListView.as_view(), name='list-recipe'),
+    # /recipe/create/
     url(r'^recipe/create/$', views.RecipeCreateView.as_view(), name='create-recipe'),
-    # /recipe/recipes/title/
-    url(r'^recipe/(?P<title>[\w.@+-]+)/$', views.RecipeUpdateView.as_view(), name='update-recipe'),
+    # /recipe/title/
+    url(r'^recipe/(?P<title>[\w-]+)/update/$', views.RecipeUpdateView.as_view(), name='update-recipe'),
     # /recipe/recipes/title/delete/
     url(r'^recipe/(?P<title>[\w.@+-]+)/delete/$', views.RecipeDelete.as_view(), name='delete-recipe'),
+    url(r'^recipe/search/(?P<word>[\w.@+-]+)/', views.search_bar_view, name='search-bar'),
 ]
