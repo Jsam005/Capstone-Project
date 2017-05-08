@@ -53,21 +53,15 @@ class RegistrationForm(UserCreationForm):
 
         return user
 
-class CreateProfileForm(forms.Form):
+class UserProfileForm(forms.Form):
     class Meta:
         model = UserProfile
         fields = (
             'location',
             'birthdate',
-            'biography'
+            'biography',
+            'profile_image'
         )
 
-class EditProfileForm(UserChangeForm):
-    class Meta:
-        model = User
-        fields = (
-            'email',
-            'first_name',
-            'last_name',
-            'password'
-        )
+class ImageUploadForm(forms.Form):
+    pass
